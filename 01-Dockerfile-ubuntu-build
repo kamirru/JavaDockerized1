@@ -1,0 +1,29 @@
+# Używamy obrazu bazowego Ubuntu 22.04
+FROM ubuntu:22.04
+
+# Ustawienie nieinteraktywnego trybu dla apt-get (żeby nie było promptów)
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Aktualizacja pakietów i instalacja niezbędnych narzędzi: Maven i OpenJDK 17
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
+    maven \
+    && apt-get clean
+
+# Ustawienie katalogu roboczego
+WORKDIR /app
+
+# Skopiowanie pliku pom.xml i pobranie zależności, aby zbudować cache dla zależności
+COPY pom.xml ./
+RUN mvn dependency:go-offline
+
+# Skopiowanie całego kodu źródłowego do obrazu
+COPY src ./src
+
+# Budowanie aplikacji
+RUN mvn clean package -DskipTests
+
+EXPOSE 8999
+
+# Uruchamianie aplikacji (zmień nazwę JAR na właściwą nazwę aplikacji)
+CMD ["java", "-jar", "target/basicweb-0.0.1-SNAPSHOT.jar"]

@@ -1,0 +1,14 @@
+# Użyj tylko lekkiego obrazu z JDK
+FROM openjdk:17-jdk-slim
+
+# Ustaw katalog roboczy
+WORKDIR /app
+
+# Skopiuj już zbudowany plik JAR do obrazu
+COPY target/basicweb-0.0.1-SNAPSHOT.jar /app/basicweb-0.0.1-SNAPSHOT.jar
+
+# Otwórz port dla aplikacji
+EXPOSE 8999
+
+# Uruchom aplikację
+ENTRYPOINT ["java", "-jar", "basicweb-0.0.1-SNAPSHOT.jar"]

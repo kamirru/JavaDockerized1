@@ -1,0 +1,34 @@
+# Stage 1: Build the application
+FROM maven:3.8.5-openjdk-17 AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy pom.xml and dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy source code and package the application
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+RUN groupadd -g 500 customUser && \
+    useradd -u 500 -g customUser customUser
+
+# Stage 2: Create the final image
+FROM gcr.io/distroless/java17
+
+WORKDIR /app
+
+# Copy the JAR file from the builder image
+COPY --from=builder /app/target/basicweb-0.0.1-SNAPSHOT.jar /app/basicweb-0.0.1-SNAPSHOT.jar
+
+#USER customUser:customUser
+#USER customUser - bez mapowanie jest blad "docker: Error response from daemon: unable to find user customUser: no matching entries in passwd file."
+#USER 500  #Zamiast odwoływać się do nazwy customUser, możesz użyć tylko UID 500, jeśli jest to wystarczające i nie wymaga nazwy użytkownika:
+
+# Expose the port
+EXPOSE 8999
+
+# Set the command to run the application, /app/ bo nie ma workdir
+ENTRYPOINT ["java", "-jar", "/app/basicweb-0.0.1-SNAPSHOT.jar"]

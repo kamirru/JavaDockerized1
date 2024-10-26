@@ -19,6 +19,9 @@ docker build -t basicweb6 -f 06-Dockerfile-jdk-copy-local-distroless .
 docker run -d -p 9006:8999 basicweb6
 docker run --rm -p 9006:8999 basicweb6
 
+docker build -t basicweb7 -f 07-Dockerfile-jdk-copy-local-distroless-user .
+docker run -d -p 9007:8999 basicweb7
+docker run --rm -p 9007:8999 basicweb7
 
 mozna jeszcze tak:
 # Instalacja OpenJDK 17 i Maven

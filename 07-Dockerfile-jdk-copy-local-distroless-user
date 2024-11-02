@@ -25,7 +25,8 @@ COPY --from=builder /app/target/basicweb-0.0.1-SNAPSHOT.jar /app/basicweb-0.0.1-
 
 #USER customUser:customUser
 #USER customUser - bez mapowanie jest blad "docker: Error response from daemon: unable to find user customUser: no matching entries in passwd file."
-#USER 500  #Zamiast odwoływać się do nazwy customUser, możesz użyć tylko UID 500, jeśli jest to wystarczające i nie wymaga nazwy użytkownika:
+#Zamiast odwoływać się do nazwy customUser, możesz użyć tylko UID 500, jeśli jest to wystarczające i nie wymaga nazwy użytkownika:
+USER 500
 
 # Expose the port
 EXPOSE 8999

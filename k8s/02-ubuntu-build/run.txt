@@ -1,0 +1,10 @@
+ kubectl apply -f k8s/02-ubuntu-build/k8s.yaml
+
+Sprawdzenie:
+
+ kubectl get ns basicweb
+ kubectl -n basicweb get deploy,po,svc,pdb
+
+Usunięcie wszystkiego z tego pliku:
+
+ kubectl delete -f k8s/02-ubuntu-build/k8s.yaml

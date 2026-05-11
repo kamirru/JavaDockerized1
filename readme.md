@@ -37,10 +37,32 @@ maven \
 
 Kubernetes (dla 08-Dockerfile-ubuntu-build-user):
 
-1. Zbuduj i wypchnij obraz do DockerHuba:
+Docker Hub - krok po kroku (po zbudowaniu image):
+wszedzie zamiast YOUR_DOCKERHUB_USERNAME camil1985
+1. Zaloguj się do Docker Hub z terminala:
 
-docker build -t YOUR_DOCKERHUB_USERNAME/basicweb:08-ubuntu-build-user -f 08-Dockerfile-ubuntu-build-user .
-docker push YOUR_DOCKERHUB_USERNAME/basicweb:08-ubuntu-build-user
+docker login
+
+2. (Jednorazowo) utwórz repozytorium `basicweb` na Docker Hub (przez UI).
+
+3. Zataguj lokalny obraz w formacie Docker Huba:
+
+docker tag basicweb8 camil1985/basicweb:08-ubuntu-build-user
+
+4. Wypchnij obraz:
+
+docker push camil1985/basicweb:08-ubuntu-build-user
+
+5. Zweryfikuj, że tag jest widoczny:
+
+docker pull camil1985/basicweb:08-ubuntu-build-user
+
+Kubernetes:
+
+1. Zbuduj i wypchnij obraz do DockerHuba (alternatywnie w jednym kroku):
+
+docker build -t camil1985/basicweb:08-ubuntu-build-user -f 08-Dockerfile-ubuntu-build-user .
+docker push camil1985/basicweb:08-ubuntu-build-user
 
 2. Ustaw swój DockerHub username w pliku:
 
@@ -48,13 +70,18 @@ k8s/01-ubuntu-build/deployment.yaml
 
 podmień:
 
-docker.io/YOUR_DOCKERHUB_USERNAME/basicweb:08-ubuntu-build-user
+docker.io/camil1985/basicweb:08-ubuntu-build-user
 
 3. Wdróż na Kubernetes:
 
 kubectl apply -k k8s/01-ubuntu-build
+microk8s kubectl apply -k k8s/01-ubuntu-build
 
 4. Szybki test lokalny:
 
 kubectl -n basicweb port-forward svc/basicweb 8080:80
 curl http://127.0.0.1:8080/
+
+w microk8s cos nie dziala port forward
+microk8s kubectl proxy --port=8080
+http://127.0.0.1:8080/api/v1/namespaces/basicweb/services/http:basicweb:80/proxy/

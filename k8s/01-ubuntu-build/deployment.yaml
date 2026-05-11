@@ -36,7 +36,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: basicweb
-          image: docker.io/YOUR_DOCKERHUB_USERNAME/basicweb:08-ubuntu-build-user
+          image: docker.io/camil1985/basicweb:08-ubuntu-build-user
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

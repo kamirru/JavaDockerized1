@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: basicweb
+  labels:
+    app.kubernetes.io/name: basicweb
+    app.kubernetes.io/part-of: java-dockerized1
